@@ -1,0 +1,124 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Test, compare, and evaluate prompts across multiple language models." />
+    <title>PromptCraft Studio</title>
+    <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <a class="brand" href="#" aria-label="PromptCraft Studio home">
+        <span class="brand-mark">P<span>C</span></span>
+        <span>PromptCraft <strong>Studio</strong></span>
+      </a>
+      <div class="topbar-actions">
+        <span class="status"><i></i> Demo mode ready</span>
+        <button class="ghost-button" id="historyButton" type="button">History <span id="historyCount">0</span></button>
+      </div>
+    </header>
+
+    <main class="workspace">
+      <section class="composer" aria-labelledby="composerTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Experiment setup</p>
+            <h1 id="composerTitle">Design your prompt</h1>
+          </div>
+          <div class="segmented" role="group" aria-label="Experiment type">
+            <button class="active" data-mode="zero-shot" type="button">Zero-shot</button>
+            <button data-mode="few-shot" type="button">Few-shot</button>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>System instruction</span>
+          <textarea id="systemPrompt" rows="3">You are a helpful, accurate assistant. Return concise answers and do not invent facts.</textarea>
+        </label>
+
+        <label class="field prompt-field">
+          <span>User prompt <small id="charCount">0 / 20,000</small></span>
+          <textarea id="prompt" rows="8" maxlength="20000" placeholder="Write the task you want every model to complete...">Summarize why prompt testing matters for an AI product team. Return three concise bullet points and mention accuracy, consistency, and cost.</textarea>
+        </label>
+
+        <div class="examples-panel" id="examplesPanel" hidden>
+          <div class="subheading">
+            <span>Few-shot example</span>
+            <span class="hint">Show the model your preferred pattern</span>
+          </div>
+          <div class="example-grid">
+            <label class="field"><span>Example input</span><textarea id="exampleInput" rows="3">Explain why API monitoring matters.</textarea></label>
+            <label class="field"><span>Ideal output</span><textarea id="exampleOutput" rows="3">• Detect failures early\n• Protect user experience\n• Control operational cost</textarea></label>
+          </div>
+        </div>
+
+        <div class="config-grid">
+          <label class="field">
+            <span>Expected keywords</span>
+            <input id="keywords" value="accuracy, consistency, cost" placeholder="comma, separated, keywords" />
+          </label>
+          <label class="field">
+            <span>Temperature <output id="temperatureValue">0.3</output></span>
+            <input id="temperature" type="range" min="0" max="1" value="0.3" step="0.1" />
+          </label>
+        </div>
+
+        <div class="provider-heading">
+          <div><p class="eyebrow">Model selection</p><h2>Compare providers</h2></div>
+          <span class="hint">Missing keys automatically use demo output</span>
+        </div>
+        <div class="provider-list">
+          <label class="provider-card selected" data-provider="demo">
+            <input type="checkbox" value="demo" checked />
+            <span class="provider-icon demo-icon">D</span>
+            <span><strong>Demo Engine</strong><small>promptcraft-demo</small></span>
+            <i class="check">✓</i>
+          </label>
+          <label class="provider-card" data-provider="openai">
+            <input type="checkbox" value="openai" />
+            <span class="provider-icon openai-icon">O</span>
+            <span><strong>OpenAI</strong><small>gpt-5-mini</small></span>
+            <i class="check">✓</i>
+          </label>
+          <label class="provider-card" data-provider="anthropic">
+            <input type="checkbox" value="anthropic" />
+            <span class="provider-icon claude-icon">A</span>
+            <span><strong>Anthropic</strong><small>claude-sonnet-4-5</small></span>
+            <i class="check">✓</i>
+          </label>
+        </div>
+
+        <button class="run-button" id="runButton" type="button">
+          <span>Run comparison</span><kbd>⌘ ↵</kbd>
+        </button>
+        <p class="error-message" id="errorMessage" role="alert"></p>
+      </section>
+
+      <section class="results" aria-labelledby="resultsTitle">
+        <div class="results-header">
+          <div><p class="eyebrow">Evaluation workspace</p><h2 id="resultsTitle">Model outputs</h2></div>
+          <button class="ghost-button" id="exportButton" type="button" disabled>Export JSON</button>
+        </div>
+        <div class="empty-state" id="emptyState">
+          <div class="empty-visual"><span>{</span><i></i><i></i><i></i><span>}</span></div>
+          <h3>Ready for your first experiment</h3>
+          <p>Select one or more providers, then run the prompt to compare responses and automatic scores.</p>
+        </div>
+        <div class="result-grid" id="resultGrid" hidden></div>
+      </section>
+    </main>
+
+    <aside class="history-drawer" id="historyDrawer" aria-hidden="true">
+      <div class="drawer-header"><div><p class="eyebrow">Saved locally</p><h2>Experiment history</h2></div><button id="closeHistory" aria-label="Close history">×</button></div>
+      <div class="history-list" id="historyList"></div>
+    </aside>
+    <div class="backdrop" id="backdrop" hidden></div>
+    <script src="/static/app.js" defer></script>
+  </body>
+</html>
+
